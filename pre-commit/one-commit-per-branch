@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+mainBranchName="develop"
+currentBranchName=$(git rev-parse --abbrev-ref HEAD)
+commitNumber=$(git rev-list --count "$mainBranchName".."$currentBranchName")
+
+if [[ "$commitNumber" > "0" ]]; then
+    exec < /dev/tty
+
+    read -p "This branch has more than one commit. Do you want to continue (Y/N)?: " reply
+
+    if ! [[ "$reply" =~ ^[Y|y]$ ]]; then
+        echo "Commit aborted!!!!!!!!!!!!!"
+        exit 1
+    fi
+fi
