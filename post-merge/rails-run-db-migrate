@@ -1,0 +1,13 @@
+#!/bin/bash
+
+migrated_files_count=$(git diff-tree -r --name-only --no-commit-id ORIG_HEAD HEAD | grep 'db/migrate/' | wc -l)
+
+if [ "$migrated_files_count" -gt "0" ]; then
+  exec < /dev/tty
+
+  read -p "There are has new migration file(s). Do you want to run Rails migrate (y/n)?: " reply
+
+  if [[ "$reply" =~ ^[Y|y]$ ]]; then
+    bundle exec rails db:migrate
+  fi
+fi
